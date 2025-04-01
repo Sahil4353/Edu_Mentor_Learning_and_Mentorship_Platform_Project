@@ -1,16 +1,18 @@
 package com.example.edumentorlearningandmentorshipplatformproject.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.edumentorlearningandmentorshipplatformproject.R;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +24,6 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private TextView tvActiveCoursesValue, tvActiveCoursesSubtitle;
     private TextView tvSessionTimeValue, tvSessionTimeSubtitle;
     private ImageView ivChartUsers, ivChartCourses, ivChartTime;
-    private BottomNavigationView bottomNavAdmin;
     private Button btnLogout;
     private FirebaseFirestore db;
     private static final int FIXED_SESSION_DURATION = 60;
@@ -32,47 +33,42 @@ public class AdminDashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
 
-        tvAdminTitle           = findViewById(R.id.tvAdminTitle);
-        tvTotalUsersValue      = findViewById(R.id.tvTotalUsersValue);
-        tvTotalUsersSubtitle   = findViewById(R.id.tvTotalUsersSubtitle);
-        ivChartUsers           = findViewById(R.id.ivChartUsers);
+        // Bind views from XML
+        tvAdminTitle            = findViewById(R.id.tvAdminTitle);
+        tvTotalUsersValue       = findViewById(R.id.tvTotalUsersValue);
+        tvTotalUsersSubtitle    = findViewById(R.id.tvTotalUsersSubtitle);
+        ivChartUsers            = findViewById(R.id.ivChartUsers);
+        tvActiveCoursesValue    = findViewById(R.id.tvActiveCoursesValue);
+        tvActiveCoursesSubtitle = findViewById(R.id.tvActiveCoursesSubtitle);
+        ivChartCourses          = findViewById(R.id.ivChartCourses);
+        tvSessionTimeValue      = findViewById(R.id.tvSessionTimeValue);
+        tvSessionTimeSubtitle   = findViewById(R.id.tvSessionTimeSubtitle);
+        ivChartTime             = findViewById(R.id.ivChartTime);
+        btnLogout               = findViewById(R.id.btnLogout);
 
-        tvActiveCoursesValue   = findViewById(R.id.tvActiveCoursesValue);
-        tvActiveCoursesSubtitle= findViewById(R.id.tvActiveCoursesSubtitle);
-        ivChartCourses         = findViewById(R.id.ivChartCourses);
-
-        tvSessionTimeValue     = findViewById(R.id.tvSessionTimeValue);
-        tvSessionTimeSubtitle  = findViewById(R.id.tvSessionTimeSubtitle);
-        ivChartTime            = findViewById(R.id.ivChartTime);
-
-        bottomNavAdmin         = findViewById(R.id.bottomNavAdmin);
-        btnLogout              = findViewById(R.id.btnLogout);
+        // Optionally, tvAdminTitle already displays "Admin Dashboard" per your XML
 
         db = FirebaseFirestore.getInstance();
 
+        // Load statistics from Firestore
         loadTotalUsers();
         loadActiveCourses();
         loadSessionTime();
 
-        bottomNavAdmin.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.action_dashboard) {
-                return true;
-            } else if (itemId == R.id.action_courses) {
-                startActivity(new Intent(this, AdminCoursesActivity.class));
-                return true;
-            } else if (itemId == R.id.action_users) {
-                startActivity(new Intent(this, AdminUsersActivity.class));
-                return true;
-            }
-            return false;
-        });
-
+        // Logout functionality: clear SharedPreferences, sign out from FirebaseAuth, and redirect to LoginActivity
         btnLogout.setOnClickListener(v -> {
+            SharedPreferences sharedPreferences = getSharedPreferences("UserPref", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.apply();
+
+            FirebaseAuth.getInstance().signOut();
+
             startActivity(new Intent(AdminDashboardActivity.this, LoginActivity.class));
             finish();
         });
     }
+
     private void loadTotalUsers() {
         db.collection("users")
                 .get()

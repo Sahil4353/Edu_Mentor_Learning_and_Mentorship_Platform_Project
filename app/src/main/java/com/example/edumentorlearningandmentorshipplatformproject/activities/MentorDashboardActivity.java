@@ -1,6 +1,7 @@
 package com.example.edumentorlearningandmentorshipplatformproject.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -38,7 +39,6 @@ public class MentorDashboardActivity extends AppCompatActivity {
         tvThisMonthValue    = findViewById(R.id.tvThisMonthValue);
         btnLogout           = findViewById(R.id.btnLogout);
         btnMyCourses        = findViewById(R.id.btnMyCourses);
-
         ivNotifications     = findViewById(R.id.ivNotification);
 
         auth = FirebaseAuth.getInstance();
@@ -59,7 +59,6 @@ public class MentorDashboardActivity extends AppCompatActivity {
                         double lastMonthIncome = 0.0;
                         double thisMonthIncome = 0.0;
 
-
                         Calendar nowCal = Calendar.getInstance();
                         int currentMonth = nowCal.get(Calendar.MONTH);
                         int currentYear  = nowCal.get(Calendar.YEAR);
@@ -74,12 +73,9 @@ public class MentorDashboardActivity extends AppCompatActivity {
                             int payMonth = payCal.get(Calendar.MONTH);
                             int payYear  = payCal.get(Calendar.YEAR);
 
-
                             if (payYear == currentYear && payMonth == currentMonth) {
                                 thisMonthIncome += priceVal;
-                            }
-
-                            else if (payYear == currentYear && payMonth == (currentMonth - 1)) {
+                            } else if (payYear == currentYear && payMonth == (currentMonth - 1)) {
                                 lastMonthIncome += priceVal;
                             }
                         }
@@ -95,8 +91,12 @@ public class MentorDashboardActivity extends AppCompatActivity {
                     });
         }
 
-
+        // Updated logout functionality: clear SharedPreferences and sign out.
         btnLogout.setOnClickListener(v -> {
+            SharedPreferences sharedPreferences = getSharedPreferences("UserPref", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.apply();
 
             auth.signOut();
 
