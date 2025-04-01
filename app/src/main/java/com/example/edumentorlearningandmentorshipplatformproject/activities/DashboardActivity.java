@@ -1,11 +1,13 @@
 package com.example.edumentorlearningandmentorshipplatformproject.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +18,7 @@ import com.example.edumentorlearningandmentorshipplatformproject.adapters.Trendi
 import com.example.edumentorlearningandmentorshipplatformproject.models.EnrolledCourse;
 import com.example.edumentorlearningandmentorshipplatformproject.models.RecommendedCourse;
 import com.example.edumentorlearningandmentorshipplatformproject.models.TrendingCourse;
+import com.example.edumentorlearningandmentorshipplatformproject.room.AppDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -54,26 +57,18 @@ public class DashboardActivity extends AppCompatActivity {
         rvEnrolledCourses.setLayoutManager(new LinearLayoutManager(this));
         rvTrendingCourses.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rvRecommendedCourses.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        enrolledAdapter = new EnrolledCoursesAdapter(getEnrolledCourses());
+
+        // Initialize the enrolled courses adapter with an empty list
+        enrolledAdapter = new EnrolledCoursesAdapter(new ArrayList<>());
         rvEnrolledCourses.setAdapter(enrolledAdapter);
+
         trendingAdapter = new TrendingCoursesAdapter(this, trendingCourses);
         rvTrendingCourses.setAdapter(trendingAdapter);
         recommendedAdapter = new RecommendedCoursesAdapter(this, recommendedCourses);
         rvRecommendedCourses.setAdapter(recommendedAdapter);
 
-        String newCourseTitle = getIntent().getStringExtra("ENROLLED_COURSE_TITLE");
-        if (newCourseTitle != null && !newCourseTitle.isEmpty()) {
-            int imageRes = getImageResourceForCourse(newCourseTitle);
-            String newInstructor = getIntent().getStringExtra("ENROLLED_INSTRUCTOR");
-            if(newInstructor == null || newInstructor.isEmpty()){
-                newInstructor = "New Instructor";
-            }
-            EnrolledCourse newCourse = new EnrolledCourse(newCourseTitle, newInstructor, 0, 10, imageRes);
-            enrolledAdapter.addCourse(newCourse);
-        }
-
+        // Trending and recommended courses remain as before
         updateDefaultCourses();
-
         db = FirebaseFirestore.getInstance();
         db.collection("courses").addSnapshotListener((snapshots, e) -> {
             if (e != null) return;
@@ -95,23 +90,11 @@ public class DashboardActivity extends AppCompatActivity {
                         }
                         if (courseType.equalsIgnoreCase("trending")) {
                             if (!containsTrending(unionTrending, title)) {
-                                unionTrending.add(new TrendingCourse(
-                                        title,
-                                        category,
-                                        rating,
-                                        price,
-                                        imageRes
-                                ));
+                                unionTrending.add(new TrendingCourse(title, category, rating, price, imageRes));
                             }
                         } else if (courseType.equalsIgnoreCase("recommended")) {
                             if (!containsRecommended(unionRecommended, title)) {
-                                unionRecommended.add(new RecommendedCourse(
-                                        title,
-                                        category,
-                                        rating,
-                                        price,
-                                        imageRes
-                                ));
+                                unionRecommended.add(new RecommendedCourse(title, category, rating, price, imageRes));
                             }
                         }
                     }
@@ -124,6 +107,21 @@ public class DashboardActivity extends AppCompatActivity {
             trendingAdapter.notifyDataSetChanged();
             recommendedAdapter.notifyDataSetChanged();
         });
+
+        // Retrieve the current user's ID from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPref", MODE_PRIVATE);
+        String currentUserId = sharedPreferences.getString("user_id", "");
+
+        // Observe the enrolled courses from the Room database for the logged in user
+        AppDatabase.getInstance(getApplicationContext())
+                .enrolledCourseDao()
+                .getEnrolledCoursesByUserId(currentUserId)
+                .observe(this, new Observer<List<EnrolledCourse>>() {
+                    @Override
+                    public void onChanged(List<EnrolledCourse> enrolledCourses) {
+                        enrolledAdapter.setCourses(enrolledCourses);
+                    }
+                });
 
         btnLogout.setOnClickListener(v -> {
             startActivity(new Intent(DashboardActivity.this, LoginActivity.class));
@@ -174,14 +172,6 @@ public class DashboardActivity extends AppCompatActivity {
             default:
                 return R.drawable.ic_default_course;
         }
-    }
-
-    private List<EnrolledCourse> getEnrolledCourses() {
-        List<EnrolledCourse> list = new ArrayList<>();
-
-        list.add(new EnrolledCourse("Python", "Angela White", 75, 1, R.drawable.ic_python_course));
-        list.add(new EnrolledCourse("Flutter", "Harry Wilson", 60, 2, R.drawable.ic_flutter_course));
-        return list;
     }
 
     private List<TrendingCourse> getDefaultTrendingCourses() {

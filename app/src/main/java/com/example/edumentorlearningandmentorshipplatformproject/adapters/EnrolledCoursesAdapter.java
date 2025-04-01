@@ -42,7 +42,6 @@ public class EnrolledCoursesAdapter extends RecyclerView.Adapter<EnrolledCourses
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(holder.itemView.getContext(), VideoPlayerActivity.class);
-
             if ("Flutter".equals(course.getTitle())) {
                 intent.putExtra("VIDEO_ID", "C-fKAzdTrLU");
             } else {
@@ -57,9 +56,17 @@ public class EnrolledCoursesAdapter extends RecyclerView.Adapter<EnrolledCourses
         return enrolledCourses.size();
     }
 
+    // Method to add a single course to the list.
     public void addCourse(EnrolledCourse course) {
         enrolledCourses.add(course);
         notifyItemInserted(enrolledCourses.size() - 1);
+    }
+
+    // New method to update the entire list of courses.
+    public void setCourses(List<EnrolledCourse> courses) {
+        enrolledCourses.clear();
+        enrolledCourses.addAll(courses);
+        notifyDataSetChanged();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

@@ -1,16 +1,23 @@
 package com.example.edumentorlearningandmentorshipplatformproject.models;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "users")
 public class User {
+    @PrimaryKey
     private String id;
     private String name;
     private String email;
     private String role;
     private String status;
 
-    public User() {
+    // No-argument constructor (required by Room)
+    public User() { }
 
-    }
-
+    // Parameterized constructor (Room will use the no-arg one, so you can annotate this with @Ignore if desired)
+    @Ignore
     public User(String id, String name, String email, String role, String status) {
         this.id = id;
         this.name = name;
@@ -19,6 +26,7 @@ public class User {
         this.status = status;
     }
 
+    // Getters and setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 

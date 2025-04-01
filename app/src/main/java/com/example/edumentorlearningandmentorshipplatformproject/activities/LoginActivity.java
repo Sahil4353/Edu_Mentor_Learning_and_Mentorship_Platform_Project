@@ -1,6 +1,8 @@
 package com.example.edumentorlearningandmentorshipplatformproject.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -34,10 +36,33 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseFirestore db;
     private boolean isPasswordVisible = false;
+    private SharedPreferences sharedPreferences;
+    private static final String PREF_NAME = "UserPref";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Initialize SharedPreferences
+        sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+
+        // Check if the user is already logged in via SharedPreferences.
+        if (sharedPreferences.contains("user_id")) {
+            String role = sharedPreferences.getString("role", "student");
+            Intent intent;
+            if ("admin".equalsIgnoreCase(role)) {
+                intent = new Intent(LoginActivity.this, AdminDashboardActivity.class);
+            } else if ("mentor".equalsIgnoreCase(role)) {
+                intent = new Intent(LoginActivity.this, MentorDashboardActivity.class);
+            } else {
+                intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                intent.putExtra("USER_NAME", sharedPreferences.getString("user_name", "Student"));
+            }
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_login);
 
         tvError = findViewById(R.id.tvError);
@@ -114,39 +139,50 @@ public class LoginActivity extends AppCompatActivity {
                                                             return;
                                                         }
 
-
                                                         String userName = document.getString("name");
                                                         if (userName == null || userName.isEmpty()) {
                                                             userName = "Student";
                                                         }
 
+                                                        String role = document.getString("role");
+                                                        if (role == null) role = "student";
+
+                                                        // Save user details in SharedPreferences
+                                                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                                                        editor.putString("user_id", currentUser.getUid());
+                                                        editor.putString("user_name", userName);
+                                                        editor.putString("email", email);
+                                                        editor.putString("role", role);
+                                                        if (status != null) {
+                                                            editor.putString("status", status);
+                                                        }
+                                                        editor.apply();
+
                                                         Toast.makeText(LoginActivity.this,
                                                                 "Login Successful!",
                                                                 Toast.LENGTH_SHORT).show();
 
-                                                        String role = document.getString("role");
-                                                        if (role == null) role = "student";
-
+                                                        // Redirect based on role
+                                                        Intent intent;
                                                         switch (role.toLowerCase()) {
                                                             case "admin":
-                                                                startActivity(new Intent(LoginActivity.this,
-                                                                        AdminDashboardActivity.class));
-                                                                finish();
+                                                                intent = new Intent(LoginActivity.this,
+                                                                        AdminDashboardActivity.class);
                                                                 break;
                                                             case "mentor":
-                                                                startActivity(new Intent(LoginActivity.this,
-                                                                        MentorDashboardActivity.class));
-                                                                finish();
+                                                                intent = new Intent(LoginActivity.this,
+                                                                        MentorDashboardActivity.class);
                                                                 break;
                                                             default:
-                                                                Intent dashboardIntent = new Intent(LoginActivity.this,
+                                                                intent = new Intent(LoginActivity.this,
                                                                         DashboardActivity.class);
-                                                                dashboardIntent.putExtra("USER_NAME", userName);
-                                                                startActivity(dashboardIntent);
-                                                                finish();
+                                                                intent.putExtra("USER_NAME", userName);
                                                                 break;
                                                         }
+                                                        startActivity(intent);
+                                                        finish();
                                                     } else {
+                                                        // Document not found
                                                         Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
                                                         intent.putExtra("USER_NAME", "Student");
                                                         startActivity(intent);
@@ -167,7 +203,6 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
         });
-
 
         tvSignUp.setOnClickListener(view -> {
             startActivity(new Intent(LoginActivity.this, RegisterActivity.class));

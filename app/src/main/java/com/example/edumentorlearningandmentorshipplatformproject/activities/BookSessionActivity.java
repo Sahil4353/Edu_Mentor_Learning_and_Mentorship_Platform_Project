@@ -2,6 +2,7 @@ package com.example.edumentorlearningandmentorshipplatformproject.activities;
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.CalendarView;
@@ -27,11 +28,16 @@ public class BookSessionActivity extends AppCompatActivity {
     private String selectedTime = "";
     private String courseName, coursePrice;
     private String mentorName = "";
+    private String userId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_session);
+
+        // Retrieve the logged in user ID from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPref", MODE_PRIVATE);
+        userId = sharedPreferences.getString("user_id", "");
 
         calendarView = findViewById(R.id.calendarView);
         tvSelectTime = findViewById(R.id.tvSelectTime);
@@ -73,12 +79,14 @@ public class BookSessionActivity extends AppCompatActivity {
 
             Toast.makeText(this, "Session scheduled on " + selectedDate + " at " + selectedTime, Toast.LENGTH_LONG).show();
 
+            // Pass the user ID along with other details to PaymentActivity
             Intent payIntent = new Intent(BookSessionActivity.this, PaymentActivity.class);
             payIntent.putExtra("COURSE_NAME", courseName);
             payIntent.putExtra("COURSE_PRICE", coursePrice);
             payIntent.putExtra("MENTOR_NAME", mentorName);
             payIntent.putExtra("SESSION_DATE", selectedDate);
             payIntent.putExtra("SESSION_TIME", selectedTime);
+            payIntent.putExtra("USER_ID", userId);
             startActivityForResult(payIntent, REQUEST_CODE_PAYMENT);
         });
     }
@@ -92,6 +100,7 @@ public class BookSessionActivity extends AppCompatActivity {
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("ENROLLED_COURSE_TITLE", courseName);
                 resultIntent.putExtra("ENROLLED_INSTRUCTOR", mentorName);
+                resultIntent.putExtra("USER_ID", userId);
                 setResult(RESULT_OK, resultIntent);
                 finish();
             } else {
