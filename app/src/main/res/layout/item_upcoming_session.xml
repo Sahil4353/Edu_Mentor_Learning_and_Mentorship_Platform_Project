@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="16dp">
+
+    <!-- Profile Image -->
+    <ImageView
+        android:id="@+id/ivProfileImage"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_profile_placeholder"
+        android:contentDescription="Profile Image"
+        android:layout_marginRight="12dp" />
+
+    <!-- Vertical container for name and date/time -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Student Name -->
+        <TextView
+            android:id="@+id/tvUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cynthia M."
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Combined Date/Time -->
+        <TextView
+            android:id="@+id/tvSessionDateTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mon, Apr 24 at 2:00 PM"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray"
+            android:textStyle="bold"/>
+    </LinearLayout>
+</LinearLayout>

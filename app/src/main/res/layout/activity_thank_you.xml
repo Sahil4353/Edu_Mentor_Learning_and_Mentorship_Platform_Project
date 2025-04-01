@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="start"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/ic_back"
+        android:contentDescription="Back"
+        android:clickable="true"
+        android:focusable="true" />
+
+        <!-- Top Title -->
+        <TextView
+            android:id="@+id/tvThanksTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thanks for enrolling!"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Graduation Hat Image -->
+        <ImageView
+            android:id="@+id/ivGraduationHat"
+            android:layout_width="352dp"
+            android:layout_height="200dp"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="Graduation Hat"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_graduation_hat" />
+
+        <!-- Congratulations Message -->
+        <TextView
+            android:id="@+id/tvCongrats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Congratulations! You’re all set to start learning"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Enrollment Info -->
+        <TextView
+            android:id="@+id/tvEnrolledInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="You’ve successfully enrolled in the course: The Science of Well-Being. Your order total was $49.99."
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Start Learning Button -->
+        <Button
+            android:id="@+id/btnStartLearning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Start Learning"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            android:padding="12dp"
+            android:backgroundTint="@android:color/holo_blue_dark"
+            android:textColor="@android:color/white"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F8FA"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="8dp">
+
+            <ImageView
+                android:id="@+id/imgUserAvatar"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_avatar_placeholder"
+                android:contentDescription="User Avatar"
+                android:padding="4dp"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/tvGreeting"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Hello, Amit!"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black" />
+
+            <ImageView
+                android:id="@+id/imgSettings"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings"
+                android:contentDescription="Settings"
+                android:layout_marginEnd="8dp" />
+
+            <ImageView
+                android:id="@+id/imgNotifications"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_notifications"
+                android:contentDescription="Notifications" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:padding="8dp"
+            android:elevation="2dp"
+            android:layout_marginVertical="8dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_search"
+                android:contentDescription="Search Icon"
+                android:layout_marginEnd="8dp" />
+
+            <EditText
+                android:id="@+id/etSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Search Here"
+                android:background="@android:color/transparent"
+                android:padding="4dp"
+                android:inputType="text" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvTopCategories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Top Categories"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupTopCategories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:clipToPadding="false"
+            app:singleLine="true"
+            app:singleSelection="false"
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            android:layoutDirection="ltr">
+
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="UI UX Design"
+                android:layout_marginRight="8dp"
+                android:textSize="11sp"
+                app:chipMinHeight="32dp"
+                app:chipCornerRadius="8dp"
+                app:chipIcon="@drawable/ic_ui_ux"
+                app:chipIconVisible="true"
+                app:chipIconSize="14dp"
+                app:iconStartPadding="2dp"
+                app:iconEndPadding="2dp"
+                app:chipStrokeColor="@android:color/darker_gray"
+                app:chipStrokeWidth="1dp"
+                android:paddingHorizontal="6dp"
+                style="@style/Widget.MaterialComponents.Chip.Choice" />
+
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Web Development"
+                android:layout_marginRight="8dp"
+                android:textSize="11sp"
+                app:chipMinHeight="32dp"
+                app:chipCornerRadius="8dp"
+                app:chipIcon="@drawable/ic_web_dev"
+                app:chipIconVisible="true"
+                app:chipIconSize="14dp"
+                app:iconStartPadding="2dp"
+                app:iconEndPadding="2dp"
+                app:chipStrokeColor="@android:color/darker_gray"
+                app:chipStrokeWidth="1dp"
+                android:paddingHorizontal="6dp"
+                style="@style/Widget.MaterialComponents.Chip.Choice" />
+
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Figma"
+                android:textSize="11sp"
+                app:chipMinHeight="32dp"
+                app:chipCornerRadius="8dp"
+                app:chipIcon="@drawable/ic_figma"
+                app:chipIconVisible="true"
+                app:chipIconSize="14dp"
+                app:iconStartPadding="2dp"
+                app:iconEndPadding="2dp"
+                app:chipStrokeColor="@android:color/darker_gray"
+                app:chipStrokeWidth="1dp"
+                android:paddingHorizontal="6dp"
+                style="@style/Widget.MaterialComponents.Chip.Choice" />
+        </com.google.android.material.chip.ChipGroup>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="4dp">
+
+
+            <TextView
+                android:id="@+id/tvEnrolledTitle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Enrolled Courses"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/tvViewAllEnrolled"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View All"
+                android:textSize="14sp"
+                android:textColor="@android:color/holo_blue_dark" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvEnrolledCourses"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:paddingBottom="4dp"
+            android:scrollbars="horizontal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="4dp">
+
+            <TextView
+                android:id="@+id/tvTrendingTitle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="New &amp; Trending Courses"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/tvViewAllTrending"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View All"
+                android:textSize="14sp"
+                android:textColor="@android:color/holo_blue_dark" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTrendingCourses"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:paddingBottom="4dp"
+            android:scrollbars="horizontal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="4dp">
+
+            <TextView
+                android:id="@+id/tvRecommendedTitle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Recommended Courses"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/tvViewAllRecommended"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View All"
+                android:textSize="14sp"
+                android:textColor="@android:color/holo_blue_dark" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvRecommendedCourses"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:paddingBottom="4dp"
+            android:scrollbars="horizontal" />
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp" />
+
+    </LinearLayout>
+</ScrollView>

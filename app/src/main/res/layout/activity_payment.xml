@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Title / Header -->
+
+        <!-- Card Number -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Enroll in Course"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center" />
+
+        <EditText
+            android:id="@+id/etCardNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Credit card number"
+            android:inputType="number"
+            android:maxLength="16"
+            android:layout_marginBottom="12dp"
+            android:padding="12dp"
+            android:background="@drawable/edittext_background_gray" />
+
+        <!-- Expiry and CVC in one horizontal layout -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+
+            <EditText
+                android:id="@+id/etExpiry"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="MM/YY"
+                android:inputType="text"
+                android:maxLength="5"
+                android:digits="0123456789/"
+                android:padding="12dp"
+                android:background="@drawable/edittext_background_gray"
+                android:layout_marginEnd="6dp" />
+
+            <EditText
+                android:id="@+id/etCvc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="CVC"
+                android:inputType="number"
+                android:maxLength="3"
+                android:padding="12dp"
+                android:background="@drawable/edittext_background_gray"
+                android:layout_marginStart="6dp" />
+        </LinearLayout>
+
+        <!-- Name on Card -->
+        <EditText
+            android:id="@+id/etNameOnCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Name on card"
+            android:inputType="textPersonName"
+            android:layout_marginBottom="12dp"
+            android:padding="12dp"
+            android:background="@drawable/edittext_background_gray" />
+
+        <!-- ZIP Code -->
+        <EditText
+            android:id="@+id/etZipCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="ZIP code"
+            android:inputType="number"
+            android:maxLength="4"
+            android:layout_marginBottom="12dp"
+            android:padding="12dp"
+            android:background="@drawable/edittext_background_gray" />
+
+        <!-- Summary -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Summary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Course Fee row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Course fee" />
+
+            <!-- Spacer to push the price to the right -->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tvCourseFee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="$0" />
+        </LinearLayout>
+
+        <!-- Tax row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tax" />
+
+            <!-- Spacer -->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tvTax"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="$0" />
+        </LinearLayout>
+
+        <!-- Total row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total" />
+
+            <!-- Spacer -->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tvTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="$0" />
+        </LinearLayout>
+
+        <!-- Coupon Code -->
+        <EditText
+            android:id="@+id/etCoupon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter coupon code"
+            android:layout_marginBottom="12dp"
+            android:padding="12dp"
+            android:background="@drawable/edittext_background_gray" />
+
+        <!-- Secure Payment Button -->
+        <Button
+            android:id="@+id/btnSecurePayment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Secure Payment"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            android:padding="14dp"
+            android:backgroundTint="@android:color/holo_blue_dark"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
+</ScrollView>

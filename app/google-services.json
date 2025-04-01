@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "732492459625",
+    "project_id": "finalproject-cf3fb",
+    "storage_bucket": "finalproject-cf3fb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:732492459625:android:a1598cd3a06399f21ffcf8",
+        "android_client_info": {
+          "package_name": "com.example.edumentorlearningandmentorshipplatformproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEy7yqP58Nc6UqdS-nM_hOc0wmBGHfXbw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_create_course"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Course Title -->
+    <EditText
+        android:id="@+id/etCourseTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Course Title" />
+
+    <!-- Course Category -->
+    <EditText
+        android:id="@+id/etCourseCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Course Category" />
+
+    <!-- Course Type (e.g., trending/recommended) -->
+    <EditText
+        android:id="@+id/etCourseType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Course Type (trending or recommended)" />
+
+    <!-- Course Rating -->
+    <EditText
+        android:id="@+id/etCourseRating"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Course Rating (e.g., 4.5)"
+        android:inputType="numberDecimal" />
+
+    <!-- Course Price -->
+    <EditText
+        android:id="@+id/etCoursePrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Course Price (e.g., $100)"
+        android:inputType="text" />
+
+    <!-- Save Course Button -->
+    <Button
+        android:id="@+id/btnSaveCourse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save Course"
+        android:layout_marginTop="24dp" />
+
+</LinearLayout>

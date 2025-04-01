@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="250dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardUseCompatPadding="true"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Course Banner -->
+        <ImageView
+            android:id="@+id/imgCourseBannerDevOps"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_devops_banner" />
+
+        <!-- Course Info -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <!-- Course Title -->
+            <TextView
+                android:id="@+id/tvCourseTitleDevOps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DevOps"
+                android:textStyle="bold"
+                android:textSize="14sp" />
+
+            <!-- Course Subtitle -->
+            <TextView
+                android:id="@+id/tvCourseSubtitleDevOps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Intermediate Level | 20 Videos"
+                android:textSize="12sp"
+                android:textColor="@android:color/darker_gray"
+                android:layout_marginTop="2dp" />
+
+            <!-- Bottom Row: Rating, Price and (optional) Bookmark -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="6dp">
+
+                <!-- Rating Block -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_star"
+                        android:tint="@android:color/holo_orange_dark" />
+
+                    <TextView
+                        android:id="@+id/tvRatingDevOps"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4.8"
+                        android:textSize="12sp"
+                        android:layout_marginStart="4dp" />
+                </LinearLayout>
+
+                <!-- Price -->
+                <TextView
+                    android:id="@+id/tvPriceDevOps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="$150"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/holo_blue_dark"
+                    android:layout_marginStart="4dp" />
+
+                <!-- Bookmark Icon (optional) -->
+                <ImageView
+                    android:id="@+id/imgBookmarkDevOps"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_bookmark_border"
+                    android:contentDescription="Bookmark"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
