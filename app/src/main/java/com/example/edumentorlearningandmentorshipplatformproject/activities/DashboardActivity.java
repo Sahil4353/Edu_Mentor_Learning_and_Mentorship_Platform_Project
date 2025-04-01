@@ -3,10 +3,14 @@ package com.example.edumentorlearningandmentorshipplatformproject.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +23,7 @@ import com.example.edumentorlearningandmentorshipplatformproject.models.Enrolled
 import com.example.edumentorlearningandmentorshipplatformproject.models.RecommendedCourse;
 import com.example.edumentorlearningandmentorshipplatformproject.models.TrendingCourse;
 import com.example.edumentorlearningandmentorshipplatformproject.room.AppDatabase;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -34,6 +39,7 @@ public class DashboardActivity extends AppCompatActivity {
     private RecommendedCoursesAdapter recommendedAdapter;
     private Button btnLogout;
     private FirebaseFirestore db;
+    private SharedPreferences sharedPreferences; // declared once
 
     private List<TrendingCourse> trendingCourses = new ArrayList<>();
     private List<RecommendedCourse> recommendedCourses = new ArrayList<>();
@@ -44,6 +50,10 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
 
         tvGreeting = findViewById(R.id.tvGreeting);
+        btnLogout = findViewById(R.id.btnLogout);
+        // Retrieve SharedPreferences once
+        sharedPreferences = getSharedPreferences("UserPref", MODE_PRIVATE);
+
         String userName = getIntent().getStringExtra("USER_NAME");
         if (userName != null && !userName.isEmpty()) {
             tvGreeting.setText("Hello, " + userName + "!");
@@ -52,13 +62,12 @@ public class DashboardActivity extends AppCompatActivity {
         rvEnrolledCourses = findViewById(R.id.rvEnrolledCourses);
         rvTrendingCourses = findViewById(R.id.rvTrendingCourses);
         rvRecommendedCourses = findViewById(R.id.rvRecommendedCourses);
-        btnLogout = findViewById(R.id.btnLogout);
 
         rvEnrolledCourses.setLayoutManager(new LinearLayoutManager(this));
         rvTrendingCourses.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rvRecommendedCourses.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        // Initialize the enrolled courses adapter with an empty list
+        // Initialize the enrolled courses adapter with an empty list; data will come from Room
         enrolledAdapter = new EnrolledCoursesAdapter(new ArrayList<>());
         rvEnrolledCourses.setAdapter(enrolledAdapter);
 
@@ -67,13 +76,15 @@ public class DashboardActivity extends AppCompatActivity {
         recommendedAdapter = new RecommendedCoursesAdapter(this, recommendedCourses);
         rvRecommendedCourses.setAdapter(recommendedAdapter);
 
-        // Trending and recommended courses remain as before
         updateDefaultCourses();
+
         db = FirebaseFirestore.getInstance();
         db.collection("courses").addSnapshotListener((snapshots, e) -> {
             if (e != null) return;
+
             List<TrendingCourse> unionTrending = new ArrayList<>(getDefaultTrendingCourses());
             List<RecommendedCourse> unionRecommended = new ArrayList<>(getDefaultRecommendedCourses());
+
             if (snapshots != null) {
                 for (DocumentSnapshot doc : snapshots.getDocuments()) {
                     String courseType = doc.getString("courseType");
@@ -108,11 +119,7 @@ public class DashboardActivity extends AppCompatActivity {
             recommendedAdapter.notifyDataSetChanged();
         });
 
-        // Retrieve the current user's ID from SharedPreferences
-        SharedPreferences sharedPreferences = getSharedPreferences("UserPref", MODE_PRIVATE);
         String currentUserId = sharedPreferences.getString("user_id", "");
-
-        // Observe the enrolled courses from the Room database for the logged in user
         AppDatabase.getInstance(getApplicationContext())
                 .enrolledCourseDao()
                 .getEnrolledCoursesByUserId(currentUserId)
@@ -124,6 +131,15 @@ public class DashboardActivity extends AppCompatActivity {
                 });
 
         btnLogout.setOnClickListener(v -> {
+            // Use the already-declared sharedPreferences variable to clear user details
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.apply();
+
+            // Sign out from FirebaseAuth
+            FirebaseAuth.getInstance().signOut();
+
+            // Redirect to LoginActivity
             startActivity(new Intent(DashboardActivity.this, LoginActivity.class));
             finish();
         });

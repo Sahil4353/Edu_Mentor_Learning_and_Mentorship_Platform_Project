@@ -145,8 +145,8 @@ public class PaymentActivity extends AppCompatActivity {
                     .addOnSuccessListener(docRef -> {
                         Toast.makeText(this, "Payment Successful!", Toast.LENGTH_SHORT).show();
 
-                        // Create a new enrolled course record using default values
-                        // Here, 0 progress and 10 hoursRemaining are used as defaults.
+                        // Create a new enrolled course record using default values.
+                        // 0 progress and 10 hoursRemaining are used as defaults.
                         // Adjust imageResId as needed – using a default drawable resource.
                         int imageResId = R.drawable.ic_default_course;
                         EnrolledCourse enrolledCourse = new EnrolledCourse(courseName, mentorName, 0, 10, imageResId, studentUid);

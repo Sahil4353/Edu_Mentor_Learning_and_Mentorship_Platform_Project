@@ -1,6 +1,7 @@
 package com.example.edumentorlearningandmentorshipplatformproject.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -8,6 +9,7 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +20,7 @@ import com.example.edumentorlearningandmentorshipplatformproject.adapters.Trendi
 import com.example.edumentorlearningandmentorshipplatformproject.models.EnrolledCourse;
 import com.example.edumentorlearningandmentorshipplatformproject.models.RecommendedCourse;
 import com.example.edumentorlearningandmentorshipplatformproject.models.TrendingCourse;
+import com.example.edumentorlearningandmentorshipplatformproject.room.AppDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -53,14 +56,19 @@ public class AdminCoursesActivity extends AppCompatActivity {
         rvEnrolledCourses.setLayoutManager(new LinearLayoutManager(this));
         rvTrendingCourses.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rvRecommendedCourses.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        enrolledAdapter = new EnrolledCoursesAdapter(getEnrolledCourses());
+
+        // Initialize the enrolled courses adapter with an empty list; data will come from Room
+        enrolledAdapter = new EnrolledCoursesAdapter(new ArrayList<>());
         rvEnrolledCourses.setAdapter(enrolledAdapter);
+
         trendingAdapter = new TrendingCoursesAdapter(this, trendingCourses);
         rvTrendingCourses.setAdapter(trendingAdapter);
         recommendedAdapter = new RecommendedCoursesAdapter(this, recommendedCourses);
         rvRecommendedCourses.setAdapter(recommendedAdapter);
+
         updateDefaultCourses();
 
+        // Listen to Firestore for trending and recommended courses updates
         db = FirebaseFirestore.getInstance();
         db.collection("courses").addSnapshotListener((snapshots, e) -> {
             if (e != null) return;
@@ -73,34 +81,19 @@ public class AdminCoursesActivity extends AppCompatActivity {
                     String courseType = doc.getString("courseType");
                     String title = doc.getString("title");
                     String price = doc.getString("price");
-
                     String category = doc.getString("category");
                     Double ratingDouble = doc.getDouble("rating");
                     float rating = (ratingDouble != null) ? ratingDouble.floatValue() : 0f;
                     int imageRes = getImageResourceForCourse(title);
 
                     if (courseType != null && title != null) {
-
                         if (category == null || category.isEmpty()) {
                             category = "Basic Level | 20 Videos";
                         }
-
                         if (courseType.equalsIgnoreCase("trending")) {
-                            updateOrAddTrending(unionTrending, new TrendingCourse(
-                                    title,
-                                    category,
-                                    rating,
-                                    price,
-                                    imageRes
-                            ));
+                            updateOrAddTrending(unionTrending, new TrendingCourse(title, category, rating, price, imageRes));
                         } else if (courseType.equalsIgnoreCase("recommended")) {
-                            updateOrAddRecommended(unionRecommended, new RecommendedCourse(
-                                    title,
-                                    category,
-                                    rating,
-                                    price,
-                                    imageRes
-                            ));
+                            updateOrAddRecommended(unionRecommended, new RecommendedCourse(title, category, rating, price, imageRes));
                         }
                     }
                 }
@@ -113,6 +106,26 @@ public class AdminCoursesActivity extends AppCompatActivity {
             trendingAdapter.notifyDataSetChanged();
             recommendedAdapter.notifyDataSetChanged();
         });
+
+        // Retrieve user role from SharedPreferences
+        SharedPreferences sp = getSharedPreferences("UserPref", MODE_PRIVATE);
+        String role = sp.getString("role", "student"); // default to student
+        if (role.equalsIgnoreCase("student")) {
+            // For a student, fetch enrolled courses by userId from Room
+            String userId = sp.getString("user_id", "");
+            AppDatabase.getInstance(getApplicationContext())
+                    .enrolledCourseDao()
+                    .getEnrolledCoursesByUserId(userId)
+                    .observe(this, new Observer<List<EnrolledCourse>>() {
+                        @Override
+                        public void onChanged(List<EnrolledCourse> courses) {
+                            enrolledAdapter.setCourses(courses);
+                        }
+                    });
+        } else {
+            // For non-student roles, display an empty enrolled courses list
+            enrolledAdapter.setCourses(new ArrayList<>());
+        }
     }
 
     private void updateDefaultCourses() {
@@ -194,15 +207,7 @@ public class AdminCoursesActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // Static default enrolled courses
-    private List<EnrolledCourse> getEnrolledCourses() {
-        List<EnrolledCourse> list = new ArrayList<>();
-        list.add(new EnrolledCourse("Python", "Angela White", 75, 1, R.drawable.ic_python_course));
-        list.add(new EnrolledCourse("Flutter", "Harry Wilson", 60, 2, R.drawable.ic_flutter_course));
-        return list;
-    }
-
-    // Default trending courses
+    // Helper method to provide default trending courses
     private List<TrendingCourse> getDefaultTrendingCourses() {
         List<TrendingCourse> list = new ArrayList<>();
         list.add(new TrendingCourse("UI UX Designing", "Beginners Level | 25 Videos", 4.9f, "$200", R.drawable.ic_ui_ux_banner));
@@ -210,7 +215,7 @@ public class AdminCoursesActivity extends AppCompatActivity {
         return list;
     }
 
-    // Default recommended courses
+    // Helper method to provide default recommended courses
     private List<RecommendedCourse> getDefaultRecommendedCourses() {
         List<RecommendedCourse> list = new ArrayList<>();
         list.add(new RecommendedCourse("DevOps", "Intermediate | 20 Videos", 4.8f, "$150", R.drawable.ic_devops_banner));

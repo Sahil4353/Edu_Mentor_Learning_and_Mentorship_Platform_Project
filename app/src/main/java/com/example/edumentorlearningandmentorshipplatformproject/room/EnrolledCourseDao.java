@@ -28,9 +28,9 @@ public interface EnrolledCourseDao {
     @Query("SELECT * FROM enrolled_courses WHERE title = :name")
     EnrolledCourse getEnrolledCourseByName(String name);
 
-    // Get all courses taught by a specific instructor
+    // Get all courses taught by a specific instructor as LiveData
     @Query("SELECT * FROM enrolled_courses WHERE instructor = :instructor")
-    List<EnrolledCourse> getEnrolledCoursesByInstructor(String instructor);
+    LiveData<List<EnrolledCourse>> getEnrolledCoursesByInstructor(String instructor);
 
     // Insert a new enrolled course
     @Insert

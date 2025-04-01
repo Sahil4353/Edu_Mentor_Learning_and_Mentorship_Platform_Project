@@ -1,5 +1,6 @@
 package com.example.edumentorlearningandmentorshipplatformproject.room;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -10,10 +11,10 @@ import com.example.edumentorlearningandmentorshipplatformproject.models.User;
 public interface UserDao {
 
     @Query("SELECT * FROM users")
-    List<User> getAllUsers();
+    LiveData<List<User>> getAllUsers();
 
     @Query("SELECT * FROM users WHERE id = :userId")
-    User getUserById(String userId);
+    LiveData<User> getUserById(String userId);
 
     @Insert
     void insertUser(User user);

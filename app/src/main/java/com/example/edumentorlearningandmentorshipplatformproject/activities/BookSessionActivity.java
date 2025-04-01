@@ -35,7 +35,7 @@ public class BookSessionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_session);
 
-        // Retrieve the logged in user ID from SharedPreferences
+        // Retrieve the logged-in user ID from SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("UserPref", MODE_PRIVATE);
         userId = sharedPreferences.getString("user_id", "");
 
@@ -79,7 +79,7 @@ public class BookSessionActivity extends AppCompatActivity {
 
             Toast.makeText(this, "Session scheduled on " + selectedDate + " at " + selectedTime, Toast.LENGTH_LONG).show();
 
-            // Pass the user ID along with other details to PaymentActivity
+            // Pass all details including userId to PaymentActivity
             Intent payIntent = new Intent(BookSessionActivity.this, PaymentActivity.class);
             payIntent.putExtra("COURSE_NAME", courseName);
             payIntent.putExtra("COURSE_PRICE", coursePrice);

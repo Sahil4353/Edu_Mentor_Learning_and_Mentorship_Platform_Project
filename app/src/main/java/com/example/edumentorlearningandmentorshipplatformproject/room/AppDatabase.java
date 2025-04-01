@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase;
 import com.example.edumentorlearningandmentorshipplatformproject.models.User;
 import com.example.edumentorlearningandmentorshipplatformproject.models.EnrolledCourse;
 
-@Database(entities = {User.class, EnrolledCourse.class}, version = 3)
+@Database(entities = {User.class, EnrolledCourse.class}, version = 5, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract UserDao userDao();
