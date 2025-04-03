@@ -37,48 +37,40 @@ public class AdminDashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
 
-        // Bind views from XML
-        tvAdminTitle            = findViewById(R.id.tvAdminTitle);
-        tvTotalUsersValue       = findViewById(R.id.tvTotalUsersValue);
-        tvTotalUsersSubtitle    = findViewById(R.id.tvTotalUsersSubtitle);
-        ivChartUsers            = findViewById(R.id.ivChartUsers);
-        tvActiveCoursesValue    = findViewById(R.id.tvActiveCoursesValue);
+        tvAdminTitle = findViewById(R.id.tvAdminTitle);
+        tvTotalUsersValue = findViewById(R.id.tvTotalUsersValue);
+        tvTotalUsersSubtitle = findViewById(R.id.tvTotalUsersSubtitle);
+        ivChartUsers = findViewById(R.id.ivChartUsers);
+        tvActiveCoursesValue = findViewById(R.id.tvActiveCoursesValue);
         tvActiveCoursesSubtitle = findViewById(R.id.tvActiveCoursesSubtitle);
-        ivChartCourses          = findViewById(R.id.ivChartCourses);
-        tvSessionTimeValue      = findViewById(R.id.tvSessionTimeValue);
-        tvSessionTimeSubtitle   = findViewById(R.id.tvSessionTimeSubtitle);
-        ivChartTime             = findViewById(R.id.ivChartTime);
-        btnLogout               = findViewById(R.id.btnLogout);
+        ivChartCourses = findViewById(R.id.ivChartCourses);
+        tvSessionTimeValue = findViewById(R.id.tvSessionTimeValue);
+        tvSessionTimeSubtitle = findViewById(R.id.tvSessionTimeSubtitle);
+        ivChartTime = findViewById(R.id.ivChartTime);
+        btnLogout = findViewById(R.id.btnLogout);
 
-        // Initialize Firestore
         db = FirebaseFirestore.getInstance();
 
-        // Load statistics from Firestore
         loadTotalUsers();
         loadActiveCourses();
         loadSessionTime();
 
-        // Logout functionality: clear SharedPreferences, sign out from FirebaseAuth, and redirect to LoginActivity
         btnLogout.setOnClickListener(v -> {
             SharedPreferences sharedPreferences = getSharedPreferences("UserPref", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear();
             editor.apply();
-
             FirebaseAuth.getInstance().signOut();
-
             startActivity(new Intent(AdminDashboardActivity.this, LoginActivity.class));
             finish();
         });
 
-        // Setup Bottom Navigation for Dashboard, Courses, and Users
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavAdmin);
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int itemId = item.getItemId();
                 if (itemId == R.id.action_dashboard) {
-                    // Already on Dashboard; no action needed.
                     return true;
                 } else if (itemId == R.id.action_courses) {
                     startActivity(new Intent(AdminDashboardActivity.this, AdminCoursesActivity.class));

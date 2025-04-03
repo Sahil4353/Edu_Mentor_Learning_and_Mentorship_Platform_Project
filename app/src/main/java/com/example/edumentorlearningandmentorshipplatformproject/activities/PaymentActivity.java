@@ -28,7 +28,7 @@ public class PaymentActivity extends AppCompatActivity {
 
     private String courseName, coursePrice, mentorName;
     private String sessionDate, sessionTime;
-    private String userId; // user id passed from BookSessionActivity or from auth
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class PaymentActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
 
-        // Retrieve extras from intent
+
         courseName = getIntent().getStringExtra("COURSE_NAME");
         coursePrice = getIntent().getStringExtra("COURSE_PRICE");
         mentorName = getIntent().getStringExtra("MENTOR_NAME");
@@ -127,7 +127,7 @@ public class PaymentActivity extends AppCompatActivity {
                 return;
             }
 
-            // Use the passed userId (or fallback to auth)
+
             String studentUid = userId;
 
             Payment payment = new Payment(
@@ -145,13 +145,9 @@ public class PaymentActivity extends AppCompatActivity {
                     .addOnSuccessListener(docRef -> {
                         Toast.makeText(this, "Payment Successful!", Toast.LENGTH_SHORT).show();
 
-                        // Create a new enrolled course record using default values.
-                        // 0 progress and 10 hoursRemaining are used as defaults.
-                        // Adjust imageResId as needed – using a default drawable resource.
                         int imageResId = R.drawable.ic_default_course;
                         EnrolledCourse enrolledCourse = new EnrolledCourse(courseName, mentorName, 0, 10, imageResId, studentUid);
 
-                        // Insert the enrolled course into Room on a background thread
                         new Thread(() -> {
                             AppDatabase appDatabase = AppDatabase.getInstance(getApplicationContext());
                             appDatabase.enrolledCourseDao().insertEnrolledCourse(enrolledCourse);

@@ -91,7 +91,7 @@ public class MentorDashboardActivity extends AppCompatActivity {
                     });
         }
 
-        // Updated logout functionality: clear SharedPreferences and sign out.
+
         btnLogout.setOnClickListener(v -> {
             SharedPreferences sharedPreferences = getSharedPreferences("UserPref", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();

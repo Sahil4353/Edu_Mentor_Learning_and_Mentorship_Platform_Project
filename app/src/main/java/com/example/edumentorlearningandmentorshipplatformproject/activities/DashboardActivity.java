@@ -3,14 +3,11 @@ package com.example.edumentorlearningandmentorshipplatformproject.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,8 +36,7 @@ public class DashboardActivity extends AppCompatActivity {
     private RecommendedCoursesAdapter recommendedAdapter;
     private Button btnLogout;
     private FirebaseFirestore db;
-    private SharedPreferences sharedPreferences; // declared once
-
+    private SharedPreferences sharedPreferences;
     private List<TrendingCourse> trendingCourses = new ArrayList<>();
     private List<RecommendedCourse> recommendedCourses = new ArrayList<>();
 
@@ -48,43 +44,31 @@ public class DashboardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-
         tvGreeting = findViewById(R.id.tvGreeting);
         btnLogout = findViewById(R.id.btnLogout);
-        // Retrieve SharedPreferences once
         sharedPreferences = getSharedPreferences("UserPref", MODE_PRIVATE);
-
         String userName = getIntent().getStringExtra("USER_NAME");
         if (userName != null && !userName.isEmpty()) {
             tvGreeting.setText("Hello, " + userName + "!");
         }
-
         rvEnrolledCourses = findViewById(R.id.rvEnrolledCourses);
         rvTrendingCourses = findViewById(R.id.rvTrendingCourses);
         rvRecommendedCourses = findViewById(R.id.rvRecommendedCourses);
-
         rvEnrolledCourses.setLayoutManager(new LinearLayoutManager(this));
         rvTrendingCourses.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rvRecommendedCourses.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-
-        // Initialize the enrolled courses adapter with an empty list; data will come from Room
         enrolledAdapter = new EnrolledCoursesAdapter(new ArrayList<>());
         rvEnrolledCourses.setAdapter(enrolledAdapter);
-
         trendingAdapter = new TrendingCoursesAdapter(this, trendingCourses);
         rvTrendingCourses.setAdapter(trendingAdapter);
         recommendedAdapter = new RecommendedCoursesAdapter(this, recommendedCourses);
         rvRecommendedCourses.setAdapter(recommendedAdapter);
-
         updateDefaultCourses();
-
         db = FirebaseFirestore.getInstance();
         db.collection("courses").addSnapshotListener((snapshots, e) -> {
             if (e != null) return;
-
             List<TrendingCourse> unionTrending = new ArrayList<>(getDefaultTrendingCourses());
             List<RecommendedCourse> unionRecommended = new ArrayList<>(getDefaultRecommendedCourses());
-
             if (snapshots != null) {
                 for (DocumentSnapshot doc : snapshots.getDocuments()) {
                     String courseType = doc.getString("courseType");
@@ -94,7 +78,6 @@ public class DashboardActivity extends AppCompatActivity {
                     Double ratingDouble = doc.getDouble("rating");
                     float rating = (ratingDouble != null) ? ratingDouble.floatValue() : 0f;
                     int imageRes = getImageResourceForCourse(title);
-
                     if (courseType != null && title != null) {
                         if (category == null || category.isEmpty()) {
                             category = "Basic Level | 20 Videos";
@@ -118,7 +101,6 @@ public class DashboardActivity extends AppCompatActivity {
             trendingAdapter.notifyDataSetChanged();
             recommendedAdapter.notifyDataSetChanged();
         });
-
         String currentUserId = sharedPreferences.getString("user_id", "");
         AppDatabase.getInstance(getApplicationContext())
                 .enrolledCourseDao()
@@ -129,17 +111,11 @@ public class DashboardActivity extends AppCompatActivity {
                         enrolledAdapter.setCourses(enrolledCourses);
                     }
                 });
-
         btnLogout.setOnClickListener(v -> {
-            // Use the already-declared sharedPreferences variable to clear user details
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear();
             editor.apply();
-
-            // Sign out from FirebaseAuth
             FirebaseAuth.getInstance().signOut();
-
-            // Redirect to LoginActivity
             startActivity(new Intent(DashboardActivity.this, LoginActivity.class));
             finish();
         });

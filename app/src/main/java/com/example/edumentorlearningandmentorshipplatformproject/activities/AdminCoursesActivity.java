@@ -57,7 +57,6 @@ public class AdminCoursesActivity extends AppCompatActivity {
         rvTrendingCourses.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rvRecommendedCourses.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        // Initialize the enrolled courses adapter with an empty list; data will come from Room
         enrolledAdapter = new EnrolledCoursesAdapter(new ArrayList<>());
         rvEnrolledCourses.setAdapter(enrolledAdapter);
 
@@ -68,14 +67,11 @@ public class AdminCoursesActivity extends AppCompatActivity {
 
         updateDefaultCourses();
 
-        // Listen to Firestore for trending and recommended courses updates
         db = FirebaseFirestore.getInstance();
         db.collection("courses").addSnapshotListener((snapshots, e) -> {
             if (e != null) return;
-
             List<TrendingCourse> unionTrending = new ArrayList<>(getDefaultTrendingCourses());
             List<RecommendedCourse> unionRecommended = new ArrayList<>(getDefaultRecommendedCourses());
-
             if (snapshots != null) {
                 for (DocumentSnapshot doc : snapshots.getDocuments()) {
                     String courseType = doc.getString("courseType");
@@ -85,7 +81,6 @@ public class AdminCoursesActivity extends AppCompatActivity {
                     Double ratingDouble = doc.getDouble("rating");
                     float rating = (ratingDouble != null) ? ratingDouble.floatValue() : 0f;
                     int imageRes = getImageResourceForCourse(title);
-
                     if (courseType != null && title != null) {
                         if (category == null || category.isEmpty()) {
                             category = "Basic Level | 20 Videos";
@@ -98,7 +93,6 @@ public class AdminCoursesActivity extends AppCompatActivity {
                     }
                 }
             }
-
             trendingCourses.clear();
             trendingCourses.addAll(unionTrending);
             recommendedCourses.clear();
@@ -107,11 +101,9 @@ public class AdminCoursesActivity extends AppCompatActivity {
             recommendedAdapter.notifyDataSetChanged();
         });
 
-        // Retrieve user role from SharedPreferences
         SharedPreferences sp = getSharedPreferences("UserPref", MODE_PRIVATE);
-        String role = sp.getString("role", "student"); // default to student
+        String role = sp.getString("role", "student");
         if (role.equalsIgnoreCase("student")) {
-            // For a student, fetch enrolled courses by userId from Room
             String userId = sp.getString("user_id", "");
             AppDatabase.getInstance(getApplicationContext())
                     .enrolledCourseDao()
@@ -123,7 +115,6 @@ public class AdminCoursesActivity extends AppCompatActivity {
                         }
                     });
         } else {
-            // For non-student roles, display an empty enrolled courses list
             enrolledAdapter.setCourses(new ArrayList<>());
         }
     }
@@ -207,7 +198,6 @@ public class AdminCoursesActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // Helper method to provide default trending courses
     private List<TrendingCourse> getDefaultTrendingCourses() {
         List<TrendingCourse> list = new ArrayList<>();
         list.add(new TrendingCourse("UI UX Designing", "Beginners Level | 25 Videos", 4.9f, "$200", R.drawable.ic_ui_ux_banner));
@@ -215,7 +205,6 @@ public class AdminCoursesActivity extends AppCompatActivity {
         return list;
     }
 
-    // Helper method to provide default recommended courses
     private List<RecommendedCourse> getDefaultRecommendedCourses() {
         List<RecommendedCourse> list = new ArrayList<>();
         list.add(new RecommendedCourse("DevOps", "Intermediate | 20 Videos", 4.8f, "$150", R.drawable.ic_devops_banner));

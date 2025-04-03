@@ -30,6 +30,7 @@ public class RecommendedCourse {
     public String getPrice() {
         return price;
     }
+
     public int getImageRes() {
         return imageRes;
     }

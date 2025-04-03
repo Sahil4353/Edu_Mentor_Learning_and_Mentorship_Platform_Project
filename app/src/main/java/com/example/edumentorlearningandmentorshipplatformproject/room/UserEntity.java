@@ -14,6 +14,7 @@ public class UserEntity {
     private String name;
     private String email;
     private String role;
+
     public UserEntity(@NonNull String id, String name, String email, String role) {
         this.id = id;
         this.name = name;

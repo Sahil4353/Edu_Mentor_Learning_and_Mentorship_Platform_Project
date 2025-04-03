@@ -16,13 +16,35 @@ public class UpcomingSession {
         this.imageUrl = imageUrl;
     }
 
-    public String getUserName() { return userName; }
-    public String getDate()     { return date; }
-    public String getTime()     { return time; }
-    public String getImageUrl() { return imageUrl; }
+    public String getUserName() {
+        return userName;
+    }
 
-    public void setUserName(String userName) { this.userName = userName; }
-    public void setDate(String date)         { this.date = date; }
-    public void setTime(String time)         { this.time = time; }
-    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public String getDate() {
+        return date;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }

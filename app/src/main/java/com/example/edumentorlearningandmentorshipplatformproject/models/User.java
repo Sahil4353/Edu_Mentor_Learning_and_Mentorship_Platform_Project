@@ -15,10 +15,8 @@ public class User {
     private String role;
     private String status;
 
-    // No-argument constructor required by Room
     public User() { }
 
-    // Parameterized constructor
     @Ignore
     public User(@NonNull String id, String name, String email, String role, String status) {
         this.id = id;

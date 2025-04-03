@@ -43,10 +43,10 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Initialize SharedPreferences
+
         sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
 
-        // Check if the user is already logged in via SharedPreferences.
+
         if (sharedPreferences.contains("user_id")) {
             String role = sharedPreferences.getString("role", "student");
             Intent intent;
@@ -147,7 +147,7 @@ public class LoginActivity extends AppCompatActivity {
                                                         String role = document.getString("role");
                                                         if (role == null) role = "student";
 
-                                                        // Save user details in SharedPreferences
+
                                                         SharedPreferences.Editor editor = sharedPreferences.edit();
                                                         editor.putString("user_id", currentUser.getUid());
                                                         editor.putString("user_name", userName);
@@ -162,7 +162,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                 "Login Successful!",
                                                                 Toast.LENGTH_SHORT).show();
 
-                                                        // Redirect based on role
+
                                                         Intent intent;
                                                         switch (role.toLowerCase()) {
                                                             case "admin":
@@ -182,7 +182,7 @@ public class LoginActivity extends AppCompatActivity {
                                                         startActivity(intent);
                                                         finish();
                                                     } else {
-                                                        // Document not found
+
                                                         Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
                                                         intent.putExtra("USER_NAME", "Student");
                                                         startActivity(intent);
