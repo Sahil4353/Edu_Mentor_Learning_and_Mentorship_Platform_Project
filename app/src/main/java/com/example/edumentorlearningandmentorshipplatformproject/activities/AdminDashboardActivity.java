@@ -3,16 +3,20 @@ package com.example.edumentorlearningandmentorshipplatformproject.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.edumentorlearningandmentorshipplatformproject.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -46,8 +50,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         ivChartTime             = findViewById(R.id.ivChartTime);
         btnLogout               = findViewById(R.id.btnLogout);
 
-        // Optionally, tvAdminTitle already displays "Admin Dashboard" per your XML
-
+        // Initialize Firestore
         db = FirebaseFirestore.getInstance();
 
         // Load statistics from Firestore
@@ -66,6 +69,26 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
             startActivity(new Intent(AdminDashboardActivity.this, LoginActivity.class));
             finish();
+        });
+
+        // Setup Bottom Navigation for Dashboard, Courses, and Users
+        BottomNavigationView bottomNav = findViewById(R.id.bottomNavAdmin);
+        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int itemId = item.getItemId();
+                if (itemId == R.id.action_dashboard) {
+                    // Already on Dashboard; no action needed.
+                    return true;
+                } else if (itemId == R.id.action_courses) {
+                    startActivity(new Intent(AdminDashboardActivity.this, AdminCoursesActivity.class));
+                    return true;
+                } else if (itemId == R.id.action_users) {
+                    startActivity(new Intent(AdminDashboardActivity.this, AdminUsersActivity.class));
+                    return true;
+                }
+                return false;
+            }
         });
     }
 
