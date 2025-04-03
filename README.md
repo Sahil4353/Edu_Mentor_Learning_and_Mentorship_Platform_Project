@@ -1,3 +1,5 @@
+EduMentor Learning and Mentorship Platform
+
 EduMentor is an Android application designed to empower students, mentors, and administrators by providing a robust, interactive learning and mentorship environment. The platform integrates modern UI design with real-time data management to deliver a seamless educational experience.
 
 Features
